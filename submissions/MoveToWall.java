@@ -79,3 +79,4 @@ public class FlipHelperMethods {
 		Pair<Integer,Point> optimal = new Pair<Integer,Point>(optimalPiece, optimalTarget);  // optimal piece to move and target
 		return optimal;
 	}
+}
