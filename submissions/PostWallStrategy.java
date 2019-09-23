@@ -13,11 +13,10 @@ import flip.g4.Player;
 import flip.g4.Utilities;
 
 // Abstracted class for wall building
-class WallStrategy{
+class PostWallStrategy{
     private int debugCount = 0;
     // Store details about the game
     private Player mPlayer;
-    public  PieceStore pieceStore;
 
     // Wall co-ordinates and number of pieces
     public int       numWallPieces;
@@ -36,9 +35,8 @@ class WallStrategy{
     // Statistics for fun
     public Integer numMovesRequired;
 
-    public WallStrategy(Player mPlayer, HashMap<Integer, Point> pieces){
+    public PostWallStrategy(Player mPlayer, HashMap<Integer, Point> pieces){
         this.mPlayer = mPlayer;
-        this.pieceStore = mPlayer.pieceStore;
         this.numMovesRequired = 0;
         this.calculateWallPositions();
 
@@ -174,18 +172,20 @@ class WallStrategy{
             Integer pieceID = idxPriority[idx];
 
             Pair<Integer, Point> move = Utilities.getNextMove(
-                this.pieceStore.myPieces.get(this.fastestWallBuilders[pieceID]),
+                this.mPlayer.playerPieces.get(this.fastestWallBuilders[pieceID]),
                 this.idealWallLocations[pieceID],
                 this.fastestWallBuilders[pieceID],
-                this.pieceStore.myPieces,
-                this.pieceStore.oppPieces
+                this.mPlayer.playerPieces,
+                this.mPlayer.opponentPieces
             );
 
             if(move != null){
                 moves.add(move);
                 // movesLeft[pieceID]--;
                 this.totalMovesLeft--;
-                this.pieceStore.movePiece(move);
+                this.mPlayer.playerPieces.replace(
+                    this.fastestWallBuilders[pieceID], move.getValue());
+                // TODO: Update player location store
             } else idx++;
         }
 
